@@ -3,13 +3,13 @@ You are to build an encryption engine for encrypting, decrypting, and cracking m
 
 Additionally, your program will need to read messages from and output them to the file system.
 
-Encryption Notes
+##Encryption Notes
 
 The encryption is based on rotation. The character map is made up of all the lowercase letters, then the numbers, then space, then period, then comma. New lines will not appear in the message nor character map.
 
-The Key
+##The Key
 
-Each message uses a unique encryption key
+###Each message uses a unique encryption key
 The key is five digits, like 41521
 The first two digits of the key are the "A" rotation (41)
 The second and third digits of the key are the "B" rotation (15)
@@ -35,7 +35,7 @@ Decrypting a Message
 
 The offsets and keys can be calculated by the same methods above. Then each character is rotated backwards instead of forwards.
 
-Cracking a Key
+##Cracking a Key
 
 When the key is not known, the offsets can still be calculated from the message date. We believe that each enemy message ends with the characters "..end..". Use that to determine when you've correctly guessed the key.
 
