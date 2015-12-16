@@ -1,6 +1,6 @@
 class Engine
   # creates the rotation every time Engine.new
-  attr_reader :date   # => nil
+  attr_reader :date, :key  # => nil
   def initialize
     @date = Time.new  # => 2015-12-15 22:10:13 -0700
     @key = rand_num   # => [7, 1, 9, 3, 0]
