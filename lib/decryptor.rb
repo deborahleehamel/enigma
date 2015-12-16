@@ -5,28 +5,28 @@ require 'pry'              # => false
 class Decryptor
   attr_reader :message, :cypher                               # => nil
   def initialize(message = nil, rotations = [57, 12, 4, 28])
-    @message = message                                        # => "zqpa6j0d9xh"
+    @message = message                                        # => "fmotmfzwptg"
     @cypher = Cypher.new.character_map.reverse                # => [",", ".", " ", 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, "z", "y", "x", "w", "v", "u", "t", "s", "r", "q", "p", "o", "n", "m", "l", "k", "j", "i", "h", "g", "f", "e", "d", "c", "b", "a"]
     @rotations = rotations                                    # => [57, 12, 4, 28]
   end                                                         # => :initialize
 
   def split_message
-    message.downcase.chars  # => ["z", "q", "p", "a", "6", "j", "0", "d", "9", "x", "h"], ["z", "q", "p", "a", "6", "j", "0", "d", "9", "x", "h"], ["z", "q", "p", "a", "6", "j", "0", "d", "9", "x", "h"], ["z", "q", "p", "a", "6", "j", "0", "d", "9", "x", "h"]
+    message.downcase.chars  # => ["f", "m", "o", "t", "m", "f", "z", "w", "p", "t", "g"], ["f", "m", "o", "t", "m", "f", "z", "w", "p", "t", "g"], ["f", "m", "o", "t", "m", "f", "z", "w", "p", "t", "g"], ["f", "m", "o", "t", "m", "f", "z", "w", "p", "t", "g"]
   end                       # => :split_message
 
   def indexed_message
-    split_message.map {|d| @cypher.index(d)}  # => [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31], [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31], [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31], [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31]
+    split_message.map {|d| @cypher.index(d)}  # => [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32], [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32], [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32], [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32]
   end                                         # => :indexed_message
 
   def parsed_message
-    comb_value = indexed_message                  # => [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31], [13, 22, 23, 38, nil, 29, nil, 35, nil, 15, 31]
-    indexed_message.each_slice(4).to_a {|a| p a}  # => [[13, 22, 23, 38], [nil, 29, nil, 35], [nil, 15, 31]], [[13, 22, 23, 38], [nil, 29, nil, 35], [nil, 15, 31]]
+    comb_value = indexed_message                  # => [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32], [33, 26, 24, 19, 26, 33, 13, 16, 23, 19, 32]
+    indexed_message.each_slice(4).to_a {|a| p a}  # => [[33, 26, 24, 19], [26, 33, 13, 16], [23, 19, 32]], [[33, 26, 24, 19], [26, 33, 13, 16], [23, 19, 32]]
   end                                             # => :parsed_message
 
   def cycled_offsets
-    # puts "this is the sum or the thing you add to your indexed"
+    # puts "this is the sum or the thing you add to indexed"
     offset = @rotations #print if want to see
-    p_message = parsed_message                                    # => [[13, 22, 23, 38], [nil, 29, nil, 35], [nil, 15, 31]]
+    p_message = parsed_message                                    # => [[33, 26, 24, 19], [26, 33, 13, 16], [23, 19, 32]]
     complete_offset = offset.cycle(p_message.length).map {|x| x}  # => [57, 12, 4, 28, 57, 12, 4, 28, 57, 12, 4, 28]
   end                                                             # => :cycled_offsets
 
@@ -35,21 +35,21 @@ class Decryptor
     # puts "this is the rotate_offset"
     # flat_offsets = cycled_offsets
     # puts "what is going on???"
-    rotate_offset = parsed_message.flatten.zip(cycled_offsets).map {|x1, x2| x1.to_i + x2.to_i}  # => [70, 34, 27, 66, 57, 41, 4, 63, 57, 27, 35]
+    rotate_offset = parsed_message.flatten.zip(cycled_offsets).map {|x1, x2| x1.to_i + x2.to_i}  # => [90, 38, 28, 47, 83, 45, 17, 44, 80, 31, 36]
     # return rotate_offset #puts if want to see
   end                                                                                            # => :creating_rotate_offset
 
   def decrypted
-    sum_for_rotator = creating_rotate_offset  # => [70, 34, 27, 66, 57, 41, 4, 63, 57, 27, 35]
+    sum_for_rotator = creating_rotate_offset  # => [90, 38, 28, 47, 83, 45, 17, 44, 80, 31, 36]
     golden_eggs = []                          # => []
-    sum_for_rotator.each do |e|               # => [70, 34, 27, 66, 57, 41, 4, 63, 57, 27, 35]
-      golden_eggs << @cypher.rotate(e)[0]     # => ["h"], ["h", "e"], ["h", "e", "l"], ["h", "e", "l", "l"], ["h", "e", "l", "l", "u"], ["h", "e", "l", "l", "u", " "], ["h", "e", "l", "l", "u", " ", 8], ["h", "e", "l", "l", "u", " ", 8, "o"], ["h", "e", "l", "l", "u", " ", 8, "o", "u"], ["h", "e", "l", "l", "u", " ", 8, "o", "u", "l"], ["h", "e", "l", "l", "u", " ", 8, "o", "u", "l", "d"]
-    end                                       # => [70, 34, 27, 66, 57, 41, 4, 63, 57, 27, 35]
-    golden_eggs.join("")                      # => "hellu 8ould"
+    sum_for_rotator.each do |e|               # => [90, 38, 28, 47, 83, 45, 17, 44, 80, 31, 36]
+      golden_eggs << @cypher.rotate(e)[0]     # => [0], [0, "a"], [0, "a", "k"], [0, "a", "k", 4], [0, "a", "k", 4, 7], [0, "a", "k", 4, 7, 6], [0, "a", "k", 4, 7, 6, "v"], [0, "a", "k", 4, 7, 6, "v", 7], [0, "a", "k", 4, 7, 6, "v", 7, " "], [0, "a", "k", 4, 7, 6, "v", 7, " ", "h"], [0, "a", "k", 4, 7, 6, "v", 7, " ", "h", "c"]
+    end                                       # => [90, 38, 28, 47, 83, 45, 17, 44, 80, 31, 36]
+    golden_eggs.join("")                      # => "0ak476v7 hc"
   end                                         # => :decrypted
   # binding.pry
 end                                           # => :decrypted
-Decryptor.new("zqpa6j0d9xh").decrypted        # => "hellu 8ould"
+Decryptor.new("fmotmfzwptg").decrypted        # => "0ak476v7 hc"
   # def decrypted
   #   reverse_cypher = @cypher.reverse
   #   sum_for_rotator = creating_rotate_offset

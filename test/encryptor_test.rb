@@ -4,6 +4,8 @@ require 'minitest/pride'
 require_relative './../lib/encryptor'
 require 'pry'
 
+
+
 class EncryptorTest < Minitest::Test
 
   def test_message_can_be_accepted

@@ -1,26 +1,26 @@
 class Engine
   # creates the rotation every time Engine.new
-  attr_reader :date, :key  # => nil
-  def initialize
-    @date = Time.new  # => 2015-12-15 22:10:13 -0700
-    @key = rand_num   # => [7, 1, 9, 3, 0]
-  end                 # => :initialize
+  attr_reader :date, :key                          # => nil
+  def initialize(date = Time.new, key = rand_num)
+    @date = date                                   # => 2015-12-16 15:05:52 -0700
+    @key = key                                     # => [2, 7, 4, 1, 8]
+  end                                              # => :initialize
 
   def rand_num
-    (0..9).to_a.sample(5)  # => [7, 1, 9, 3, 0]
+    (0..9).to_a.sample(5)  # => [2, 7, 4, 1, 8]
   end                      # => :rand_num
 
   def key_gen
-    a = @key[0..1].join("").to_i  # => 71, 71, 71, 71
-    b = @key[1..2].join("").to_i  # => 19, 19, 19, 19
-    c = @key[2..3].join("").to_i  # => 93, 93, 93, 93
-    d = @key[3..4].join("").to_i  # => 30, 30, 30, 30
-    [a,b,c,d]                     # => [71, 19, 93, 30], [71, 19, 93, 30], [71, 19, 93, 30], [71, 19, 93, 30]
+    a = @key[0..1].join("").to_i  # => 27, 27, 27, 27
+    b = @key[1..2].join("").to_i  # => 74, 74, 74, 74
+    c = @key[2..3].join("").to_i  # => 41, 41, 41, 41
+    d = @key[3..4].join("").to_i  # => 18, 18, 18, 18
+    [a,b,c,d]                     # => [27, 74, 41, 18], [27, 74, 41, 18], [27, 74, 41, 18], [27, 74, 41, 18]
   end                             # => :key_gen
 
   def date_offset
-    formatted_date = @date.strftime("%d%m%y").to_i  # => 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215, 151215
-    squared_date = (formatted_date ** 2).to_s       # => "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225", "22865976225"
+    formatted_date = @date.strftime("%d%m%y").to_i  # => 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215, 161215
+    squared_date = (formatted_date ** 2).to_s       # => "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225", "25990276225"
     squared_date[-4..-1]                            # => "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225", "6225"
   end                                               # => :date_offset
 
@@ -33,16 +33,16 @@ class Engine
   end                        # => :date_assignment
 
   def rotation
-    a = key_gen[0] + date_assignment[0]  # => 77
-    b = key_gen[1] + date_assignment[1]  # => 21
-    c = key_gen[2] + date_assignment[2]  # => 95
-    d = key_gen[3] + date_assignment[3]  # => 35
-    [a,b,c,d]                            # => [77, 21, 95, 35]
+    a = key_gen[0] + date_assignment[0]  # => 33
+    b = key_gen[1] + date_assignment[1]  # => 76
+    c = key_gen[2] + date_assignment[2]  # => 43
+    d = key_gen[3] + date_assignment[3]  # => 23
+    [a,b,c,d]                            # => [33, 76, 43, 23]
   end                                    # => :rotation
 
 end  # => :rotation
 
-Engine.new.rotation  # => [77, 21, 95, 35]
+Engine.new.rotation  # => [33, 76, 43, 23]
 
 # (0..9).to_a.sample(5)
 #engine = Engine.new
