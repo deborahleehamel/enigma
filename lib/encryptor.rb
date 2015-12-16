@@ -1,55 +1,55 @@
-require_relative 'cypher'
-require_relative 'engine'
-require 'pry'
+require_relative 'cypher'  # => true
+require_relative 'engine'  # => true
+require 'pry'              # => false
 
 class Encryptor
-  attr_reader :message, :cypher
+  attr_reader :message, :cypher         # => nil
   def initialize(message = nil)
-    @message = message
-    @cypher = Cypher.new.character_map
-    @rotations = Engine.new.rotation
-  end
+    @message = message                  # => "Hello World"
+    @cypher = Cypher.new.character_map  # => ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, " ", ".", ","]
+    @rotations = Engine.new.rotation    # => [57, 12, 4, 28]
+  end                                   # => :initialize
 
   def split_message
-    message.downcase.chars
-  end
+    message.downcase.chars  # => ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"], ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"], ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"], ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
+  end                       # => :split_message
 
   def indexed_message
-    split_message.map {|d| @cypher.index(d)}
-  end
+    split_message.map {|d| @cypher.index(d)}  # => [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3], [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3], [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3], [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3]
+  end                                         # => :indexed_message
 
   def parsed_message
-    comb_value = indexed_message
-    indexed_message.each_slice(4).to_a {|a| p a}
-  end
+    comb_value = indexed_message                  # => [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3], [7, 4, 11, 11, 14, 36, 22, 14, 17, 11, 3]
+    indexed_message.each_slice(4).to_a {|a| p a}  # => [[7, 4, 11, 11], [14, 36, 22, 14], [17, 11, 3]], [[7, 4, 11, 11], [14, 36, 22, 14], [17, 11, 3]]
+  end                                             # => :parsed_message
 
   def cycled_offsets
     # puts "this is the sum or the thing you add to your indexed"
     offset = @rotations #print if want to see
-    p_message = parsed_message
-    complete_offset = offset.cycle(p_message.length).map {|x| x}
-  end
+    p_message = parsed_message                                    # => [[7, 4, 11, 11], [14, 36, 22, 14], [17, 11, 3]]
+    complete_offset = offset.cycle(p_message.length).map {|x| x}  # => [57, 12, 4, 28, 57, 12, 4, 28, 57, 12, 4, 28]
+  end                                                             # => :cycled_offsets
 
   def creating_rotate_offset
     # flattened_message = parsed_message.flatten
     # puts "this is the rotate_offset"
     # flat_offsets = cycled_offsets
     # puts "what is going on???"
-    rotate_offset = parsed_message.flatten.zip(cycled_offsets).map {|x1, x2| x1.to_i + x2.to_i}
+    rotate_offset = parsed_message.flatten.zip(cycled_offsets).map {|x1, x2| x1.to_i + x2.to_i}  # => [64, 16, 15, 39, 71, 48, 26, 42, 74, 23, 7]
     # return rotate_offset #puts if want to see
-  end
+  end                                                                                            # => :creating_rotate_offset
 
   def encrypted
-    sum_for_rotator = creating_rotate_offset
-    golden_eggs = []
-    sum_for_rotator.each do |e|
-      golden_eggs << @cypher.rotate(e)[0]
-    end
-    golden_eggs.join("")
-  end
+    sum_for_rotator = creating_rotate_offset  # => [64, 16, 15, 39, 71, 48, 26, 42, 74, 23, 7]
+    golden_eggs = []                          # => []
+    sum_for_rotator.each do |e|               # => [64, 16, 15, 39, 71, 48, 26, 42, 74, 23, 7]
+      golden_eggs << @cypher.rotate(e)[0]     # => ["z"], ["z", "q"], ["z", "q", "p"], ["z", "q", "p", "a"], ["z", "q", "p", "a", 6], ["z", "q", "p", "a", 6, "j"], ["z", "q", "p", "a", 6, "j", 0], ["z", "q", "p", "a", 6, "j", 0, "d"], ["z", "q", "p", "a", 6, "j", 0, "d", 9], ["z", "q", "p", "a", 6, "j", 0, "d", 9, "x"], ["z", "q", "p", "a", 6, "j", 0, "d", 9, "x", "h"]
+    end                                       # => [64, 16, 15, 39, 71, 48, 26, 42, 74, 23, 7]
+    golden_eggs.join("")                      # => "zqpa6j0d9xh"
+  end                                         # => :encrypted
   # binding.pry
-end
-Encryptor.new("Hello World").encrypted
+end                                           # => :encrypted
+Encryptor.new("Hello World").encrypted        # => "zqpa6j0d9xh"
   # def decrypted
   #   reverse_cypher = @cypher.reverse
   #   sum_for_rotator = creating_rotate_offset
