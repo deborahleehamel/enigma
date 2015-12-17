@@ -1,7 +1,7 @@
 require 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
-require_relative './../lib/decryptor'
+require_relative './../lib/decrypt'
 require 'pry'
 
 class DecryptTest < Minitest::Test

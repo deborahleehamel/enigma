@@ -5,7 +5,7 @@ require_relative './../lib/cypher'
 
 class CypherTest < Minitest::Test
   def test_letter_output_based_on_array_index
-      binding.pry
+      #binding.pry
     cypher = Cypher.new
     assert_equal "a", cypher.character_map[0]
     assert_equal "z", cypher.character_map[25]
@@ -28,7 +28,7 @@ class CypherTest < Minitest::Test
     assert_equal ["b", "c", "d", "e"], cypher.character_map.slice(1,4)
   end
 
-  def test_map_length_is_38_cypher
+  def test_map_length_is_39_cypher
     cypher = Cypher.new
     assert_equal 39, cypher.character_map.length
   end

@@ -72,7 +72,4 @@ class EngineTest < Minitest::Test
   #     assert_equal true, e.rotation[0] == e.key_gen[0].to_i + e.date_assignment[0].to_i
   #     binding.pry
   # end
-
-
-
 end
