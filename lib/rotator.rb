@@ -70,5 +70,5 @@ c.rotated
 puts "Created #{ARGV[1]} with the key #{c.engine.key.join} and date #{c.engine.date.strftime("%d%m%y")}"
 end
 
-# Rotator.new("Hello World",Cypher.new.character_map).rotated
+Rotator.new("Hello World",Cypher.new.character_map).rotated
 # Rotator.new("fmotmfzwptg",Cypher.new.character_map.reverse).rotated
