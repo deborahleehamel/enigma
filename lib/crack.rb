@@ -1,57 +1,88 @@
 require_relative 'cypher'
 require_relative 'engine'
-require 'pry'
+require_relative 'decrypt'
+
 
 class Crack
-  attr_reader :encrypted_messaage
+	attr_reader :input, :expected
 
-  def initialize (encrypted_messaage)
-    @message = encrypted_message
-    @cypher = Cypher.new.character_map
-    @rev_cypher = Cypher.new.character_map.reverse
+	def initialize(input)
+		@input = File.read(input_message)
+		@expected = [13, 3, 37, 37]
+	end
+
+	def input_message
+     if ARGV[0] == nil
+       File.read("message.txt")
+     else
+       File.read(ARGV[0])
+     end
+   end
+
+	def characters
+    character_map = ('a'..'z').to_a + ("0".."9").to_a + [" ", ".", ","]
   end
 
-  def split_message
-    split_pea = @message.downcase.chars
-    return split_pea
+	def length
+		@input.length
+	end
+
+	def key_text
+		text = []
+		text = @input[-4..-1].chars
+	end
+
+	def position_array
+		key = []
+		key << (length - 4) % 4
+		key << (length - 3) % 4
+		key << (length - 2) % 4
+		key << (length - 1) % 4
+	end
+
+	def encrypted_character_value
+  	answer = []
+  	key_text.each do |x|
+  		answer << characters.index(x).to_i
+  	end
+		answer
   end
 
-def indexed_message
-  index_pea = split_message
-  numbered = index_pea.map { |i|  @rev_cypher.index(i)}
-  return numbered
+  def find_key
+		offset_true = []
+   	offset_true << (39 - @expected[0]) + encrypted_character_value[0]
+   	offset_true << (39 - @expected[1]) + encrypted_character_value[1]
+   	offset_true << (39 - @expected[2]) + encrypted_character_value[2]
+   	offset_true << (39 - @expected[3]) + encrypted_character_value[3]
+  end
+
+  def put_in_order
+		order = Hash[position_array.zip(find_key)]
+    order.map.with_index do |x, index|
+      order[index]
+		end
+  end
+
+  def decrypt(argument)
+    Decrypt.new(put_in_order).decrypt(argument)
+  end
+
+	def output_cracked_code(cracked_message)
+    if ARGV[1] == nil
+      File.write("cracked.txt", cracked_message)
+    else
+      File.write(ARGV[1], cracked_message)
+    end
+  end
 end
-
-def chopped_message
-  chopped = indexed_message.length
-  chopped % 4 [0..-2]
-
-end
-
-def method
-  mssg[-7..-1] zip(..end..)
-
-  if mssg % 4 == 0 #no reaminder from mssg % 4
-    let [-4..-1]#
+# ruby ./lib/crack.rb encrypted.txt cracked.txt
+if __FILE__ == $PROGRAM_NAME
+e = Crack.new
+e.encrypt
+e.crack
+  if ARGV[1] == nil
+    puts "Created 'cracked.txt' from 'encrypted.txt' with the cracked key #{e.cracked_key} and date #{e.date}"
   else
-    7 - remainder(3?) - 4 = [-7..-4]
-    7 - remainder(2?) - 5 =
-    7 - remainder(1?) - 6 =
-
-    slice(4)
-    remove any[...nil]
+    puts "Created #{ARGV[1]} from #{ARGV[0]} with the cracked key #{e.cracked_key} and date #{e.date}"
   end
-
-*index encryption going backwards
-
-*index of each character from the original message going backwards
-
-*difference between index of encrypted msg going backwards and index of each character from original message (if negative add 39)
-
-*length of encryption % 4
-
-*remainder tells you where a, b, c, d are
-
-*forward index plus rotation
-
 end

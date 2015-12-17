@@ -4,23 +4,13 @@ require 'minitest/pride'
 require_relative './../lib/engine'
 require 'pry'
 
-
-
 class EngineTest < Minitest::Test
 
   def setup
-    engine = Engine.new
+    @engine = Engine.new
     @key = [1,2,3,4,5]
     @date = "2015-12-15 22:10:13 -0700"
   end
-  # def test_random_five_number_output
-  #   results = []
-  #   100.times do
-  #   input = KeyGenerator.new
-  #   results << input
-  # end
-  # assert results.uniq.count > 50
-  # end
 
   def test_that_it_initializes
     assert_equal [1,2,3,4,5], @key
@@ -28,8 +18,8 @@ class EngineTest < Minitest::Test
   end
 
   def test_key_gen_array_length
-    engine = Engine.new
-    assert_equal 4, engine.key_gen.length
+    # engine = Engine.new
+    assert_equal 4, @engine.key_gen.length
   end
 
   def test_final_rotation

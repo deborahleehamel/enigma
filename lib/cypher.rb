@@ -9,5 +9,3 @@ class Cypher
     @character_map = letters + numbers + [" ", ".", ","]
   end
 end
-
-#map = CharacterMap.new  # ~> NameError: uninitialized constant CharacterMap
