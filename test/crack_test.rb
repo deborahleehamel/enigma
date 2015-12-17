@@ -8,7 +8,7 @@ class CrackTest < Minitest::Test
   def test_crack_can_initialize
     skip
     crack = Crack.new
-    # assert_equal ,
+    # assert_equal , if I get to this point yay!
   end
 
 end
