@@ -6,8 +6,8 @@ require_relative 'decrypt'
 class Crack
 	attr_reader :input, :expected
 
-	def initialize(input)
-		@input = File.read(input_message)
+	def initialize
+		# how to get input?
 		@expected = [13, 3, 37, 37]
 	end
 
@@ -20,7 +20,7 @@ class Crack
    end
 
 	def characters
-    character_map = ('a'..'z').to_a + ("0".."9").to_a + [" ", ".", ","]
+    character_map = @character_map
   end
 
 	def length
@@ -76,7 +76,7 @@ class Crack
   end
 end
 # ruby ./lib/crack.rb encrypted.txt cracked.txt
-if __FILE__ == $PROGRAM_NAME
+if __FILE__ == $0
 e = Crack.new
 e.encrypt
 e.crack
